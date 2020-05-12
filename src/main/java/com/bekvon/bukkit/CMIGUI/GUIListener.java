@@ -1,7 +1,7 @@
 package com.bekvon.bukkit.CMIGUI;
 
 import com.bekvon.bukkit.cmiLib.CMIReflections;
-import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.legacy_residence.Residence;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

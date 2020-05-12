@@ -1,6 +1,6 @@
 package com.residence.zip;
 
-import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.legacy_residence.Residence;
 import org.bukkit.World;
 
 import java.io.File;

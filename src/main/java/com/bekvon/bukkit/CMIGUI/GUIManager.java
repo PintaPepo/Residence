@@ -1,7 +1,7 @@
 package com.bekvon.bukkit.CMIGUI;
 
 import com.bekvon.bukkit.cmiLib.CMIReflections;
-import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.legacy_residence.Residence;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

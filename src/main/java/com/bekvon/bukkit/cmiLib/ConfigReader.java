@@ -1,13 +1,12 @@
 package com.bekvon.bukkit.cmiLib;
 
-import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.legacy_residence.Residence;
 import com.google.common.io.Files;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;

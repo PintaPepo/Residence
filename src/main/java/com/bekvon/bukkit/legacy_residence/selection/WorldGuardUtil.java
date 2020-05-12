@@ -3,7 +3,7 @@ package com.bekvon.bukkit.legacy_residence.selection;
 import com.bekvon.bukkit.legacy_residence.Residence;
 import com.bekvon.bukkit.legacy_residence.containers.Visualizer;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ public class WorldGuardUtil implements WorldGuardInterface {
     }
 
     @Override
-    public ProtectedRegion getRegion(Player player, CuboidArea area) {
+    public ProtectedRegion getRegion(Player player, _CuboidArea area) {
         // TODO world guard has an API do not use Reflection
 //
 //        if (area == null)
@@ -69,7 +69,7 @@ public class WorldGuardUtil implements WorldGuardInterface {
                 Region.getMaximumPoint().getBlockY(), Region.getMaximumPoint().getBlockZ());
         Visualizer v = new Visualizer(player);
         v.setAreas(plugin.getSelectionManager().getSelectionCuboid(player));
-        v.setErrorAreas(new CuboidArea(lowLoc, highLoc));
+        v.setErrorAreas(new _CuboidArea(lowLoc, highLoc));
         plugin.getSelectionManager().showBounds(player, v);
         return true;
     }

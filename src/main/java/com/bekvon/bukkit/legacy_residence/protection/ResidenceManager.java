@@ -43,7 +43,7 @@ public class ResidenceManager implements ResidenceInterface {
 
     private static List<ChunkRef> getChunks(ClaimedResidence res) {
         List<ChunkRef> chunks = new ArrayList<>();
-        for (CuboidArea area : res.getAreaArray()) {
+        for (_CuboidArea area : res.getAreaArray()) {
             chunks.addAll(area.getChunks());
         }
         return chunks;
@@ -208,7 +208,7 @@ public class ResidenceManager implements ResidenceInterface {
             return false;
         }
 
-        CuboidArea newArea = new CuboidArea(loc1, loc2);
+        _CuboidArea newArea = new _CuboidArea(loc1, loc2);
         ClaimedResidence newRes = new ClaimedResidence(owner, loc1.getWorld().getName(), plugin);
         newRes.getPermissions().applyDefaultFlags();
         newRes.setEnterMessage(group.getDefaultEnterMessage());
@@ -416,7 +416,7 @@ public class ResidenceManager implements ResidenceInterface {
         }
     }
 
-    public String checkAreaCollision(CuboidArea newarea, ClaimedResidence parentResidence) {
+    public String checkAreaCollision(_CuboidArea newarea, ClaimedResidence parentResidence) {
         Set<Entry<String, ClaimedResidence>> set = residences.entrySet();
         for (Entry<String, ClaimedResidence> entry : set) {
             ClaimedResidence check = entry.getValue();
@@ -427,7 +427,7 @@ public class ResidenceManager implements ResidenceInterface {
         return null;
     }
 
-    public ClaimedResidence collidesWithResidence(CuboidArea newarea) {
+    public ClaimedResidence collidesWithResidence(_CuboidArea newarea) {
         Set<Entry<String, ClaimedResidence>> set = residences.entrySet();
         for (Entry<String, ClaimedResidence> entry : set) {
             ClaimedResidence check = entry.getValue();
@@ -518,11 +518,11 @@ public class ResidenceManager implements ResidenceInterface {
 
             if (plugin.getConfigManager().isUseClean() && plugin.getConfigManager().getCleanWorlds().contains(res.getWorld())) {
 
-                CuboidArea[] arr = res.getAreaArray();
+                _CuboidArea[] arr = res.getAreaArray();
                 Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
                     @Override
                     public void run() {
-                        for (CuboidArea area : arr) {
+                        for (_CuboidArea area : arr) {
                             Location low = area.getLowLoc().clone();
                             Location high = area.getHighLoc().clone();
 
@@ -563,7 +563,7 @@ public class ResidenceManager implements ResidenceInterface {
             }
 
             if (regenerate) {
-                for (CuboidArea one : res.getAreaArray()) {
+                for (_CuboidArea one : res.getAreaArray()) {
                     plugin.getSelectionManager().regenerate(one);
                 }
             }
@@ -648,7 +648,7 @@ public class ResidenceManager implements ResidenceInterface {
         String worldInfo = plugin.msg(lm.General_World, perms.getWorld());
 
         if (res.getAreaArray().length > 0 && (res.getPermissions().has(Flags.hidden, FlagCombo.FalseOrNone) && res.getPermissions().has(Flags.coords, FlagCombo.TrueOrNone) || resadmin)) {
-            CuboidArea area = res.getAreaArray()[0];
+            _CuboidArea area = res.getAreaArray()[0];
             String cord1 = plugin.msg(lm.General_CoordsTop, area.getHighLoc().getBlockX(), area.getHighLoc().getBlockY(), area.getHighLoc().getBlockZ());
             String cord2 = plugin.msg(lm.General_CoordsBottom, area.getLowLoc().getBlockX(), area.getLowLoc().getBlockY(), area.getLowLoc().getBlockZ());
             worldInfo += ChatColor.translateAlternateColorCodes('&', plugin.msg(lm.General_CoordsLiner, cord1, cord2));
@@ -1104,7 +1104,7 @@ public class ResidenceManager implements ResidenceInterface {
             plugin.msg(reqPlayer, lm.General_NotOnline);
             return;
         }
-        CuboidArea[] areas = res.getAreaArray();
+        _CuboidArea[] areas = res.getAreaArray();
 
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(giveplayer);
         PermissionGroup group = rPlayer.getGroup();
@@ -1118,7 +1118,7 @@ public class ResidenceManager implements ResidenceInterface {
             return;
         }
         if (!resadmin) {
-            for (CuboidArea area : areas) {
+            for (_CuboidArea area : areas) {
                 if (!res.isSubzone() && !res.isSmallerThanMax(giveplayer, area, resadmin) || res.isSubzone() && !res.isSmallerThanMaxSubzone(giveplayer, area,
                         resadmin)) {
                     plugin.msg(reqPlayer, lm.Residence_GiveLimits);

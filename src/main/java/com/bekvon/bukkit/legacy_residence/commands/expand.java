@@ -7,7 +7,7 @@ import com.bekvon.bukkit.legacy_residence.containers.cmd;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -49,7 +49,7 @@ public class expand implements cmd {
             return true;
 
         String resName = res.getName();
-        CuboidArea area = null;
+        _CuboidArea area = null;
         String areaName = null;
 
         if (args.length == 1) {

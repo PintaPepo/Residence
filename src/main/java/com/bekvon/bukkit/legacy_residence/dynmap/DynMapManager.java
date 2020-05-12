@@ -5,7 +5,7 @@ import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.economy.TransactionManager;
 import com.bekvon.bukkit.legacy_residence.economy.rent.RentManager;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.bekvon.bukkit.legacy_residence.protection.ResidencePermissions;
 import com.bekvon.bukkit.legacy_residence.utils.GetTime;
 import org.bukkit.Bukkit;
@@ -209,7 +209,7 @@ public class DynMapManager {
             return;
         }
 
-        for (Entry<String, CuboidArea> oneArea : res.getAreaMap().entrySet()) {
+        for (Entry<String, _CuboidArea> oneArea : res.getAreaMap().entrySet()) {
 
             String id = oneArea.getKey() + "." + resid;
 
@@ -280,7 +280,7 @@ public class DynMapManager {
         if (res == null)
             return;
 
-        for (Entry<String, CuboidArea> oneArea : res.getAreaMap().entrySet()) {
+        for (Entry<String, _CuboidArea> oneArea : res.getAreaMap().entrySet()) {
             String id = oneArea.getKey() + "." + resid;
             if (resareas.containsKey(id)) {
                 AreaMarker marker = resareas.remove(id);

@@ -7,7 +7,7 @@ import com.bekvon.bukkit.legacy_residence.containers.CommandAnnotation;
 import com.bekvon.bukkit.legacy_residence.containers.cmd;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.bekvon.bukkit.legacy_residence.shopStuff.Board;
 import com.bekvon.bukkit.legacy_residence.shopStuff.ShopListener;
 import com.bekvon.bukkit.legacy_residence.shopStuff.ShopVote;
@@ -243,7 +243,7 @@ public class shop implements cmd {
             if (place < 1)
                 place = 1;
 
-            CuboidArea cuboid = plugin.getSelectionManager().getSelectionCuboid(player);
+            _CuboidArea cuboid = plugin.getSelectionManager().getSelectionCuboid(player);
 
             if (cuboid.getXSize() > 16 || cuboid.getYSize() > 16 || cuboid.getZSize() > 16) {
                 plugin.msg(player, lm.Shop_ToBigSelection);

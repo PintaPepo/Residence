@@ -15,12 +15,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CuboidArea {
+public class _CuboidArea {
     protected String worldName;
     private Location highPoints;
     private Location lowPoints;
 
-    public CuboidArea(Location startLoc, Location endLoc) {
+    public _CuboidArea(Location startLoc, Location endLoc) {
         int highx, highy, highz, lowx, lowy, lowz;
         if (startLoc.getBlockX() > endLoc.getBlockX()) {
             highx = startLoc.getBlockX();
@@ -48,7 +48,7 @@ public class CuboidArea {
         worldName = startLoc.getWorld().getName();
     }
 
-    public CuboidArea() {
+    public _CuboidArea() {
     }
 
     private static boolean advCuboidCheckCollision(Location A1High, Location A1Low, Location A2High, Location A2Low) {
@@ -74,11 +74,11 @@ public class CuboidArea {
         return false;
     }
 
-    public static CuboidArea newLoad(String root, World world) throws Exception {
+    public static _CuboidArea newLoad(String root, World world) throws Exception {
         if (root == null || !root.contains(":")) {
             throw new Exception("Invalid residence physical location...");
         }
-        CuboidArea newArea = new CuboidArea();
+        _CuboidArea newArea = new _CuboidArea();
         String[] split = root.split(":");
         try {
             int x1 = Integer.parseInt(split[0]);
@@ -97,11 +97,11 @@ public class CuboidArea {
         return newArea;
     }
 
-    public static CuboidArea load(Map<String, Object> root, World world) throws Exception {
+    public static _CuboidArea load(Map<String, Object> root, World world) throws Exception {
         if (root == null) {
             throw new Exception("Invalid residence physical location...");
         }
-        CuboidArea newArea = new CuboidArea();
+        _CuboidArea newArea = new _CuboidArea();
         int x1 = (Integer) root.get("X1");
         int y1 = (Integer) root.get("Y1");
         int z1 = (Integer) root.get("Z1");
@@ -114,7 +114,7 @@ public class CuboidArea {
         return newArea;
     }
 
-    public boolean isAreaWithinArea(CuboidArea area) {
+    public boolean isAreaWithinArea(_CuboidArea area) {
         return (this.containsLoc(area.highPoints) && this.containsLoc(area.lowPoints));
     }
 
@@ -146,7 +146,7 @@ public class CuboidArea {
         return true;
     }
 
-    public boolean checkCollision(CuboidArea area) {
+    public boolean checkCollision(_CuboidArea area) {
         if (!area.getWorld().equals(this.getWorld())) {
             return false;
         }
@@ -200,8 +200,8 @@ public class CuboidArea {
         out.writeInt(lowPoints.getBlockZ());
     }
 
-    public CuboidArea load(DataInputStream in) throws IOException {
-        CuboidArea newArea = new CuboidArea();
+    public _CuboidArea load(DataInputStream in) throws IOException {
+        _CuboidArea newArea = new _CuboidArea();
         Server server = Residence.getInstance().getServ();
         World world = server.getWorld(in.readUTF());
         int highx = in.readInt();

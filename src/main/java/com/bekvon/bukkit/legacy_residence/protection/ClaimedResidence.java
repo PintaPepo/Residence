@@ -35,7 +35,7 @@ import java.util.Map.Entry;
 public class ClaimedResidence {
 
     protected ClaimedResidence parent;
-    protected Map<String, CuboidArea> areas;
+    protected Map<String, _CuboidArea> areas;
     protected Map<String, ClaimedResidence> subzones;
     protected ResidencePermissions perms;
     protected ResidenceBank bank;
@@ -180,10 +180,10 @@ public class ClaimedResidence {
         for (Entry<String, Object> map : areamap.entrySet()) {
             if (map.getValue() instanceof String) {
                 // loading new same format
-                res.areas.put(map.getKey(), CuboidArea.newLoad((String) map.getValue(), world));
+                res.areas.put(map.getKey(), _CuboidArea.newLoad((String) map.getValue(), world));
             } else {
                 // loading old format
-                res.areas.put(map.getKey(), CuboidArea.load((Map<String, Object>) map.getValue(), world));
+                res.areas.put(map.getKey(), _CuboidArea.load((Map<String, Object>) map.getValue(), world));
             }
         }
 
@@ -395,7 +395,7 @@ public class ClaimedResidence {
         return deep;
     }
 
-    public boolean isBiggerThanMin(Player player, CuboidArea area, boolean resadmin) {
+    public boolean isBiggerThanMin(Player player, _CuboidArea area, boolean resadmin) {
         if (resadmin)
             return true;
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(player);
@@ -415,7 +415,7 @@ public class ClaimedResidence {
         return true;
     }
 
-    public boolean isBiggerThanMinSubzone(Player player, CuboidArea area, boolean resadmin) {
+    public boolean isBiggerThanMinSubzone(Player player, _CuboidArea area, boolean resadmin) {
         if (resadmin)
             return true;
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(player);
@@ -435,7 +435,7 @@ public class ClaimedResidence {
         return true;
     }
 
-    public boolean isSmallerThanMax(Player player, CuboidArea area, boolean resadmin) {
+    public boolean isSmallerThanMax(Player player, _CuboidArea area, boolean resadmin) {
         if (resadmin)
             return true;
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(player);
@@ -455,7 +455,7 @@ public class ClaimedResidence {
         return true;
     }
 
-    public boolean isSmallerThanMaxSubzone(Player player, CuboidArea area, boolean resadmin) {
+    public boolean isSmallerThanMaxSubzone(Player player, _CuboidArea area, boolean resadmin) {
         if (resadmin)
             return true;
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(player);
@@ -475,15 +475,15 @@ public class ClaimedResidence {
         return true;
     }
 
-    public boolean addArea(CuboidArea area, String name) {
+    public boolean addArea(_CuboidArea area, String name) {
         return addArea(null, area, name, true);
     }
 
-    public boolean addArea(Player player, CuboidArea area, String name, boolean resadmin) {
+    public boolean addArea(Player player, _CuboidArea area, String name, boolean resadmin) {
         return addArea(player, area, name, resadmin, true);
     }
 
-    public boolean addArea(Player player, CuboidArea area, String name, boolean resadmin, boolean chargeMoney) {
+    public boolean addArea(Player player, _CuboidArea area, String name, boolean resadmin, boolean chargeMoney) {
         if (!plugin.validName(name)) {
             if (player != null) {
                 plugin.msg(player, lm.Invalid_NameCharacters);
@@ -507,7 +507,7 @@ public class ClaimedResidence {
 
         if (!resadmin && plugin.getConfigManager().getEnforceAreaInsideArea() && this.getParent() == null) {
             boolean inside = false;
-            for (CuboidArea are : areas.values()) {
+            for (_CuboidArea are : areas.values()) {
                 if (are.isAreaWithinArea(area)) {
                     inside = true;
                 }
@@ -623,17 +623,17 @@ public class ClaimedResidence {
         return true;
     }
 
-    public boolean replaceArea(CuboidArea neware, String name) {
+    public boolean replaceArea(_CuboidArea neware, String name) {
         return this.replaceArea(null, neware, name, true);
     }
 
-    public boolean replaceArea(Player player, CuboidArea newarea, String name, boolean resadmin) {
+    public boolean replaceArea(Player player, _CuboidArea newarea, String name, boolean resadmin) {
         if (!areas.containsKey(name)) {
             if (player != null)
                 plugin.msg(player, lm.Area_NonExist);
             return false;
         }
-        CuboidArea oldarea = areas.get(name);
+        _CuboidArea oldarea = areas.get(name);
         if (!newarea.getWorld().getName().equalsIgnoreCase(perms.getWorld())) {
             if (player != null)
                 plugin.msg(player, lm.Area_DiffWorld);
@@ -679,7 +679,7 @@ public class ClaimedResidence {
                     continue;
 
                 boolean good = false;
-                for (CuboidArea arae : getAreaArray()) {
+                for (_CuboidArea arae : getAreaArray()) {
                     if (arae != oldarea && arae.isAreaWithinArea(res.getArea(area))) {
                         good = true;
                     }
@@ -847,7 +847,7 @@ public class ClaimedResidence {
             }
         }
 
-        CuboidArea newArea = new CuboidArea(loc1, loc2);
+        _CuboidArea newArea = new _CuboidArea(loc1, loc2);
 
         Set<Entry<String, ClaimedResidence>> set = subzones.entrySet();
         for (Entry<String, ClaimedResidence> resEntry : set) {
@@ -966,10 +966,10 @@ public class ClaimedResidence {
         return zones.toArray(new String[0]);
     }
 
-    public boolean checkCollision(CuboidArea area) {
+    public boolean checkCollision(_CuboidArea area) {
         Set<String> set = areas.keySet();
         for (String key : set) {
-            CuboidArea checkarea = areas.get(key);
+            _CuboidArea checkarea = areas.get(key);
             if (checkarea != null) {
                 if (checkarea.checkCollision(area)) {
                     return true;
@@ -980,8 +980,8 @@ public class ClaimedResidence {
     }
 
     public boolean containsLoc(Location loc) {
-        Collection<CuboidArea> keys = areas.values();
-        for (CuboidArea key : keys) {
+        Collection<_CuboidArea> keys = areas.values();
+        for (_CuboidArea key : keys) {
             if (key.containsLoc(loc)) {
                 if (parent != null)
                     return parent.containsLoc(loc);
@@ -1030,39 +1030,39 @@ public class ClaimedResidence {
     }
 
     public long getTotalSize() {
-        Collection<CuboidArea> set = areas.values();
+        Collection<_CuboidArea> set = areas.values();
         long size = 0;
         if (!plugin.getConfigManager().isNoCostForYBlocks())
-            for (CuboidArea entry : set) {
+            for (_CuboidArea entry : set) {
                 size = size + entry.getSize();
             }
         else
-            for (CuboidArea entry : set) {
+            for (_CuboidArea entry : set) {
                 size = size + (entry.getXSize() * entry.getZSize());
             }
         return size;
     }
 
     public long getXZSize() {
-        Collection<CuboidArea> set = areas.values();
+        Collection<_CuboidArea> set = areas.values();
         long size = 0;
-        for (CuboidArea entry : set) {
+        for (_CuboidArea entry : set) {
             size = size + (entry.getXSize() * entry.getZSize());
         }
         return size;
     }
 
-    public CuboidArea[] getAreaArray() {
-        CuboidArea[] temp = new CuboidArea[areas.size()];
+    public _CuboidArea[] getAreaArray() {
+        _CuboidArea[] temp = new _CuboidArea[areas.size()];
         int i = 0;
-        for (CuboidArea area : areas.values()) {
+        for (_CuboidArea area : areas.values()) {
             temp[i] = area;
             i++;
         }
         return temp;
     }
 
-    public Map<String, CuboidArea> getAreaMap() {
+    public Map<String, _CuboidArea> getAreaMap() {
         return areas;
     }
 
@@ -1121,7 +1121,7 @@ public class ClaimedResidence {
     }
 
     public Location getMiddleFreeLoc(Location insideLoc, Player player) {
-        CuboidArea area = this.getAreaByLoc(insideLoc);
+        _CuboidArea area = this.getAreaByLoc(insideLoc);
         if (area == null) {
             return insideLoc;
         }
@@ -1164,7 +1164,7 @@ public class ClaimedResidence {
     }
 
     public Location getOutsideFreeLoc(Location insideLoc, Player player) {
-        CuboidArea area = this.getAreaByLoc(insideLoc);
+        _CuboidArea area = this.getAreaByLoc(insideLoc);
         if (area == null) {
             return insideLoc;
         }
@@ -1251,18 +1251,18 @@ public class ClaimedResidence {
         return loc;
     }
 
-    public CuboidArea getMainArea() {
-        CuboidArea area = areas.get(this.isSubzone() ? this.getResidenceName() : "main");
+    public _CuboidArea getMainArea() {
+        _CuboidArea area = areas.get(this.isSubzone() ? this.getResidenceName() : "main");
         if (area == null && !areas.isEmpty())
-            for (Entry<String, CuboidArea> one : areas.entrySet()) {
+            for (Entry<String, _CuboidArea> one : areas.entrySet()) {
                 area = one.getValue();
                 break;
             }
         return area;
     }
 
-    public CuboidArea getAreaByLoc(Location loc) {
-        for (CuboidArea thisarea : areas.values()) {
+    public _CuboidArea getAreaByLoc(Location loc) {
+        for (_CuboidArea thisarea : areas.values()) {
             if (thisarea.containsLoc(loc)) {
                 return thisarea;
             }
@@ -1337,8 +1337,8 @@ public class ClaimedResidence {
 
     public void printAdvancedAreaList(Player player, int page) {
         ArrayList<String> temp = new ArrayList<>();
-        for (Entry<String, CuboidArea> entry : areas.entrySet()) {
-            CuboidArea a = entry.getValue();
+        for (Entry<String, _CuboidArea> entry : areas.entrySet()) {
+            _CuboidArea a = entry.getValue();
             Location h = a.getHighLoc();
             Location l = a.getLowLoc();
             if (this.getPermissions().has(Flags.coords, FlagCombo.OnlyFalse))
@@ -1353,7 +1353,7 @@ public class ClaimedResidence {
     public String[] getAreaList() {
         String[] arealist = new String[areas.size()];
         int i = 0;
-        for (Entry<String, CuboidArea> entry : areas.entrySet()) {
+        for (Entry<String, _CuboidArea> entry : areas.entrySet()) {
             arealist[i] = entry.getKey();
             i++;
         }
@@ -1551,15 +1551,15 @@ public class ClaimedResidence {
     }
 
     public String getAreaIDbyLoc(Location loc) {
-        for (Entry<String, CuboidArea> area : areas.entrySet()) {
+        for (Entry<String, _CuboidArea> area : areas.entrySet()) {
             if (area.getValue().containsLoc(loc))
                 return area.getKey();
         }
         return null;
     }
 
-    public CuboidArea getCuboidAreabyName(String name) {
-        for (Entry<String, CuboidArea> area : areas.entrySet()) {
+    public _CuboidArea getCuboidAreabyName(String name) {
+        for (Entry<String, _CuboidArea> area : areas.entrySet()) {
             if (area.getKey().equals(name))
                 return area.getValue();
         }
@@ -1673,11 +1673,11 @@ public class ClaimedResidence {
             root.put("IgnoreList", map);
 
         if (plugin.getConfigManager().isNewSaveMechanic()) {
-            for (Entry<String, CuboidArea> entry : areas.entrySet()) {
+            for (Entry<String, _CuboidArea> entry : areas.entrySet()) {
                 areamap.put(entry.getKey(), entry.getValue().newSave());
             }
         } else {
-            for (Entry<String, CuboidArea> entry : areas.entrySet()) {
+            for (Entry<String, _CuboidArea> entry : areas.entrySet()) {
                 areamap.put(entry.getKey(), entry.getValue().save());
             }
         }
@@ -1780,7 +1780,7 @@ public class ClaimedResidence {
                     plugin.msg(player, lm.Area_Exists);
                 return false;
             }
-            CuboidArea area = areas.get(oldName);
+            _CuboidArea area = areas.get(oldName);
             if (area == null) {
                 if (player != null)
                     plugin.msg(player, lm.Area_InvalidName);
@@ -1796,7 +1796,7 @@ public class ClaimedResidence {
         return false;
     }
 
-    public CuboidArea getArea(String name) {
+    public _CuboidArea getArea(String name) {
         return areas.get(name);
     }
 

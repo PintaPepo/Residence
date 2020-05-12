@@ -8,7 +8,7 @@ import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionGroup;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.bekvon.bukkit.legacy_residence.text.help.PageInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -202,8 +202,8 @@ public class TransactionManager implements MarketBuyInterface {
         int amount = res.getSellPrice();
 
         if (!resadmin && !group.buyLandIgnoreLimits()) {
-            CuboidArea[] areas = res.getAreaArray();
-            for (CuboidArea thisarea : areas) {
+            _CuboidArea[] areas = res.getAreaArray();
+            for (_CuboidArea thisarea : areas) {
                 if (!res.isSubzone() && !res.isSmallerThanMax(player, thisarea, resadmin) || res.isSubzone() && !res.isSmallerThanMaxSubzone(player, thisarea,
                         resadmin)) {
                     plugin.msg(player, lm.Residence_BuyTooBig);

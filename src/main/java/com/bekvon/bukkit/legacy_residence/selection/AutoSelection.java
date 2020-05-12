@@ -5,7 +5,7 @@ import com.bekvon.bukkit.legacy_residence.containers.AutoSelector;
 import com.bekvon.bukkit.legacy_residence.containers.ResidencePlayer;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionGroup;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -69,7 +69,7 @@ public class AutoSelection {
 
         boolean changed = false;
 
-        CuboidArea area = new CuboidArea(loc1, loc2);
+        _CuboidArea area = new _CuboidArea(loc1, loc2);
         Location hloc = area.getHighLoc();
         Location lloc = area.getLowLoc();
 

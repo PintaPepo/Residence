@@ -9,7 +9,7 @@ import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionGroup;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -181,7 +181,7 @@ public class select implements cmd {
                 return true;
             }
             resName = res.getName();
-            CuboidArea area = null;
+            _CuboidArea area = null;
             if (args.length > 2) {
                 area = res.getArea(args[2]);
                 areaName = args[2];

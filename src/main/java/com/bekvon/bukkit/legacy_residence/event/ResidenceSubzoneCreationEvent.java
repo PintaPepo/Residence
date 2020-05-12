@@ -1,7 +1,7 @@
 package com.bekvon.bukkit.legacy_residence.event;
 
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
@@ -9,9 +9,9 @@ public class ResidenceSubzoneCreationEvent extends CancellableResidencePlayerEve
 
     private static final HandlerList handlers = new HandlerList();
     protected String resname;
-    CuboidArea area;
+    _CuboidArea area;
 
-    public ResidenceSubzoneCreationEvent(Player player, String name, ClaimedResidence resref, CuboidArea resarea) {
+    public ResidenceSubzoneCreationEvent(Player player, String name, ClaimedResidence resref, _CuboidArea resarea) {
         super("RESIDENCE_SUBZONE_CREATE", resref, player);
         resname = name;
         area = resarea;
@@ -34,11 +34,11 @@ public class ResidenceSubzoneCreationEvent extends CancellableResidencePlayerEve
         resname = name;
     }
 
-    public CuboidArea getPhysicalArea() {
+    public _CuboidArea getPhysicalArea() {
         return area;
     }
 
-    public void setPhysicalArea(CuboidArea newarea) {
+    public void setPhysicalArea(_CuboidArea newarea) {
         area = newarea;
     }
 }

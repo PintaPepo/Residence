@@ -1,7 +1,7 @@
 package com.bekvon.bukkit.legacy_residence.selection;
 
 import com.bekvon.bukkit.legacy_residence.Residence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -112,7 +112,7 @@ public class WorldEdit7SelectionManager extends SelectionManager {
     }
 
     @Override
-    public void regenerate(CuboidArea area) {
+    public void regenerate(_CuboidArea area) {
         // Create new selector
         CuboidRegionSelector sellection = new CuboidRegionSelector(BukkitAdapter.adapt(area.getWorld()));
 

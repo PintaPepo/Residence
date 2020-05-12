@@ -6,7 +6,7 @@ import com.bekvon.bukkit.legacy_residence.containers.Flags;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.economy.rent.RentableLand;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.bekvon.bukkit.legacy_residence.protection.FlagPermissions.FlagCombo;
 import com.bekvon.bukkit.legacy_residence.utils.GetTime;
 import org.apache.commons.io.FileUtils;
@@ -106,7 +106,7 @@ public class InformationPager {
             StringB.append(" ").append(plugin.msg(lm.General_Owner, res.getOwner()));
 
             if (res.getAreaArray().length > 0 && (res.getPermissions().has(Flags.hidden, FlagCombo.FalseOrNone) && res.getPermissions().has(Flags.coords, FlagCombo.TrueOrNone) || resadmin)) {
-                CuboidArea area = res.getAreaArray()[0];
+                _CuboidArea area = res.getAreaArray()[0];
                 String cord1 = plugin.msg(lm.General_CoordsTop, area.getHighLoc().getBlockX(), area.getHighLoc().getBlockY(), area.getHighLoc().getBlockZ());
                 String cord2 = plugin.msg(lm.General_CoordsBottom, area.getLowLoc().getBlockX(), area.getLowLoc().getBlockY(), area.getLowLoc().getBlockZ());
                 String worldInfo = ChatColor.translateAlternateColorCodes('&', plugin.msg(lm.General_CoordsLiner, cord1, cord2));
@@ -178,7 +178,7 @@ public class InformationPager {
             StringB.append(" ").append(plugin.msg(lm.General_Owner, res.getOwner()));
 
             if (res.getAreaArray().length > 0 && (res.getPermissions().has(Flags.hidden, FlagCombo.FalseOrNone) && res.getPermissions().has(Flags.coords, FlagCombo.TrueOrNone) || resadmin)) {
-                CuboidArea area = res.getAreaArray()[0];
+                _CuboidArea area = res.getAreaArray()[0];
                 String cord1 = plugin.msg(lm.General_CoordsTop, area.getHighLoc().getBlockX(), area.getHighLoc().getBlockY(), area.getHighLoc().getBlockZ());
                 String cord2 = plugin.msg(lm.General_CoordsBottom, area.getLowLoc().getBlockX(), area.getLowLoc().getBlockY(), area.getLowLoc().getBlockZ());
                 String worldInfo = ChatColor.translateAlternateColorCodes('&', plugin.msg(lm.General_CoordsLiner, cord1, cord2));
@@ -253,7 +253,7 @@ public class InformationPager {
                     StringB.append(" ").append(plugin.msg(lm.General_Owner, res.getOwner()));
 
                     if (res.getAreaArray().length > 0 && (res.getPermissions().has(Flags.hidden, FlagCombo.FalseOrNone) && res.getPermissions().has(Flags.coords, FlagCombo.TrueOrNone) || resadmin)) {
-                        CuboidArea area = res.getAreaArray()[0];
+                        _CuboidArea area = res.getAreaArray()[0];
                         String cord1 = plugin.msg(lm.General_CoordsTop, area.getHighLoc().getBlockX(), area.getHighLoc().getBlockY(), area.getHighLoc().getBlockZ());
                         String cord2 = plugin.msg(lm.General_CoordsBottom, area.getLowLoc().getBlockX(), area.getLowLoc().getBlockY(), area.getLowLoc().getBlockZ());
                         String worldInfo = ChatColor.translateAlternateColorCodes('&', plugin.msg(lm.General_CoordsLiner, cord1, cord2));

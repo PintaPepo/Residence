@@ -129,7 +129,7 @@ public class ConfigReader extends YamlConfiguration {
         }
         Files.createParentDirs(file);
         String data = insertComments(saveToString());
-        PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8);
+        PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8.toString());
         try {
             writer.write(data);
         } finally {

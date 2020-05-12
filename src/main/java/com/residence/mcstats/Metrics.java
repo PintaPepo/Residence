@@ -178,7 +178,7 @@ public class Metrics {
      * @return the encoded text, as UTF-8
      */
     private static String encode(final String text) throws UnsupportedEncodingException {
-        return URLEncoder.encode(text, StandardCharsets.UTF_8);
+        return URLEncoder.encode(text, StandardCharsets.UTF_8.toString());
     }
 
     /**

@@ -13,7 +13,7 @@ import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionGroup;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.bekvon.bukkit.legacy_residence.protection.FlagPermissions;
 import com.bekvon.bukkit.legacy_residence.protection.FlagPermissions.FlagCombo;
 import org.bukkit.Location;
@@ -53,7 +53,7 @@ public class ResidenceBlockListener implements Listener {
         this.plugin = residence;
     }
 
-    public static void resize(Residence plugin, Player player, CuboidArea cuboid, boolean checkBalance, int maxX, int maxY, int maxZ) {
+    public static void resize(Residence plugin, Player player, _CuboidArea cuboid, boolean checkBalance, int maxX, int maxY, int maxZ) {
 
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(player);
         PermissionGroup group = rPlayer.getGroup();
@@ -88,7 +88,7 @@ public class ResidenceBlockListener implements Listener {
                 continue;
             }
 
-            CuboidArea c = new CuboidArea();
+            _CuboidArea c = new _CuboidArea();
             c.setLowLocation(cuboid.getLowLoc().clone().add(-dir.getLow().getX(), -dir.getLow().getY(), -dir.getLow().getZ()));
             c.setHighLocation(cuboid.getHighLoc().clone().add(dir.getHigh().getX(), dir.getHigh().getY(), dir.getHigh().getZ()));
 

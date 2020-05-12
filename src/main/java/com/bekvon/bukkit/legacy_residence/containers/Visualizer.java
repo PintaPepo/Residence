@@ -1,7 +1,7 @@
 package com.bekvon.bukkit.legacy_residence.containers;
 
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,8 +13,8 @@ import java.util.List;
 public class Visualizer {
     private Player player;
     private long start;
-    private List<CuboidArea> areas = new ArrayList<CuboidArea>();
-    private List<CuboidArea> errorAreas = new ArrayList<CuboidArea>();
+    private List<_CuboidArea> areas = new ArrayList<_CuboidArea>();
+    private List<_CuboidArea> errorAreas = new ArrayList<_CuboidArea>();
     private int id = -1;
     private int errorId = -1;
     private int baseShedId = -1;
@@ -74,7 +74,7 @@ public class Visualizer {
         this.player = player;
     }
 
-    public List<CuboidArea> getAreas() {
+    public List<_CuboidArea> getAreas() {
         return areas;
     }
 
@@ -83,20 +83,20 @@ public class Visualizer {
             this.areas = Arrays.asList(res.getAreaArray());
     }
 
-    public void setAreas(CuboidArea[] areas) {
+    public void setAreas(_CuboidArea[] areas) {
         this.areas = Arrays.asList(areas);
     }
 
-    public void setAreas(ArrayList<CuboidArea> areas) {
+    public void setAreas(ArrayList<_CuboidArea> areas) {
         this.areas = areas;
     }
 
-    public void setAreas(CuboidArea area) {
-        areas = new ArrayList<CuboidArea>();
+    public void setAreas(_CuboidArea area) {
+        areas = new ArrayList<_CuboidArea>();
         this.areas.add(area);
     }
 
-    public List<CuboidArea> getErrorAreas() {
+    public List<_CuboidArea> getErrorAreas() {
         return errorAreas;
     }
 
@@ -105,15 +105,15 @@ public class Visualizer {
             this.errorAreas = Arrays.asList(res.getAreaArray());
     }
 
-    public void setErrorAreas(CuboidArea[] errorAreas) {
+    public void setErrorAreas(_CuboidArea[] errorAreas) {
         this.errorAreas = Arrays.asList(errorAreas);
     }
 
-    public void setErrorAreas(ArrayList<CuboidArea> errorAreas) {
+    public void setErrorAreas(ArrayList<_CuboidArea> errorAreas) {
         this.errorAreas = errorAreas;
     }
 
-    public void setErrorAreas(CuboidArea errorArea) {
+    public void setErrorAreas(_CuboidArea errorArea) {
         this.errorAreas.add(errorArea);
     }
 

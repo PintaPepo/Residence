@@ -4,7 +4,7 @@ import com.bekvon.bukkit.legacy_residence.Residence;
 import com.bekvon.bukkit.legacy_residence.containers.Visualizer;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
@@ -23,7 +23,7 @@ public class WorldGuard7Util implements WorldGuardInterface {
     }
 
     @Override
-    public ProtectedRegion getRegion(Player player, CuboidArea area) {
+    public ProtectedRegion getRegion(Player player, _CuboidArea area) {
 
         if (area == null)
             return null;
@@ -72,7 +72,7 @@ public class WorldGuard7Util implements WorldGuardInterface {
                 Region.getMaximumPoint().getBlockY(), Region.getMaximumPoint().getBlockZ());
         Visualizer v = new Visualizer(player);
         v.setAreas(plugin.getSelectionManager().getSelectionCuboid(player));
-        v.setErrorAreas(new CuboidArea(lowLoc, highLoc));
+        v.setErrorAreas(new _CuboidArea(lowLoc, highLoc));
         plugin.getSelectionManager().showBounds(player, v);
         return true;
     }

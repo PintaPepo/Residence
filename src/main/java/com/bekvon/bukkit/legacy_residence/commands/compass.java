@@ -7,7 +7,7 @@ import com.bekvon.bukkit.legacy_residence.containers.cmd;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -38,7 +38,7 @@ public class compass implements cmd {
             return null;
         }
 
-        CuboidArea area = res.getMainArea();
+        _CuboidArea area = res.getMainArea();
         if (area == null)
             return false;
         Location loc = res.getTeleportLocation(player);

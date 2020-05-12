@@ -6,7 +6,7 @@ import com.bekvon.bukkit.legacy_residence.containers.CommandAnnotation;
 import com.bekvon.bukkit.legacy_residence.containers.ResidencePlayer;
 import com.bekvon.bukkit.legacy_residence.containers.cmd;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionGroup;
-import com.bekvon.bukkit.legacy_residence.protection.CuboidArea;
+import com.bekvon.bukkit.legacy_residence.protection._CuboidArea;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class auto implements cmd {
 
-    public static void resize(Residence plugin, Player player, CuboidArea cuboid, boolean checkBalance) {
+    public static void resize(Residence plugin, Player player, _CuboidArea cuboid, boolean checkBalance) {
 
         ResidencePlayer rPlayer = plugin.getPlayerManager().getResidencePlayer(player);
         PermissionGroup group = rPlayer.getGroup();
@@ -60,7 +60,7 @@ public class auto implements cmd {
                 continue;
             }
 
-            CuboidArea c = new CuboidArea();
+            _CuboidArea c = new _CuboidArea();
             c.setLowLocation(cuboid.getLowLoc().clone().add(-dir.getLow().getX(), -dir.getLow().getY(), -dir.getLow().getZ()));
             c.setHighLocation(cuboid.getHighLoc().clone().add(dir.getHigh().getX(), dir.getHigh().getY(), dir.getHigh().getZ()));
 

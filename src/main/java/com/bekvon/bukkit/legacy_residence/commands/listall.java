@@ -22,12 +22,12 @@ public class listall implements cmd {
         World world = null;
 
         c:
-        for (int i = 1; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
             try {
                 page = Integer.parseInt(args[i]);
                 if (page < 1)
                     page = 1;
-                continue;
+                continue; // TODO Possible bug
             } catch (Exception ex) {
             }
 

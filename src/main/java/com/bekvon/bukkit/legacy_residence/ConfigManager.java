@@ -169,7 +169,7 @@ public class ConfigManager {
 //    private boolean TownEnabled = false;
 //    private int TownMinRange = 0;
 
-//    protected boolean DisableNoFlagMessageUse;
+    //    protected boolean DisableNoFlagMessageUse;
 //    protected List<String> DisableNoFlagMessageWorlds = new ArrayList<String>();
     protected boolean showIntervalMessages;
     protected boolean ShowNoobMessage;
@@ -201,7 +201,7 @@ public class ConfigManager {
     protected List<Material> CleanBlocks = new ArrayList<Material>();
     protected List<String> NoFlowWorlds;
 
-//    protected CMIParticle SelectedSpigotFrame;
+    //    protected CMIParticle SelectedSpigotFrame;
 //    protected CMIParticle SelectedSpigotSides;
 //
 //    protected CMIParticle OverlapSpigotFrame;
@@ -725,11 +725,11 @@ public class ConfigManager {
             name = name.replace(".", "_");
 
             String path = "Global.RandomTeleportation.Worlds." + name + ".";
-            boolean enabled = c.get("Enabled", true);
-            int MaxCoord = c.get("MaxCoord", 1000);
-            int MinCoord = c.get("MinCoord", c.getC().getInt(path + "MinCord", 500));
-            int CenterX = c.get("CenterX", 0);
-            int CenterZ = c.get("CenterZ", 0);
+            boolean enabled = c.get(path + "Enabled", true);
+            int MaxCoord = c.get(path + "MaxCoord", 1000);
+            int MinCoord = c.get(path + "MinCoord", c.getC().getInt(path + "MinCord", 500));
+            int CenterX = c.get(path + "CenterX", 0);
+            int CenterZ = c.get(path + "CenterZ", 0);
 
             if (!enabled)
                 continue;

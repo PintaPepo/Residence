@@ -14,7 +14,9 @@ import com.bekvon.bukkit.legacy_residence.chat.ChatManager;
 import com.bekvon.bukkit.legacy_residence.containers.*;
 import com.bekvon.bukkit.legacy_residence.dynmap.DynMapListeners;
 import com.bekvon.bukkit.legacy_residence.dynmap.DynMapManager;
-import com.bekvon.bukkit.legacy_residence.economy.*;
+import com.bekvon.bukkit.legacy_residence.economy.BlackHoleEconomy;
+import com.bekvon.bukkit.legacy_residence.economy.EconomyInterface;
+import com.bekvon.bukkit.legacy_residence.economy.TransactionManager;
 import com.bekvon.bukkit.legacy_residence.economy.rent.RentManager;
 import com.bekvon.bukkit.legacy_residence.gui.FlagUtil;
 import com.bekvon.bukkit.legacy_residence.itemlist.WorldItemManager;
@@ -31,7 +33,10 @@ import com.bekvon.bukkit.legacy_residence.signsStuff.SignUtil;
 import com.bekvon.bukkit.legacy_residence.text.Language;
 import com.bekvon.bukkit.legacy_residence.text.help.HelpEntry;
 import com.bekvon.bukkit.legacy_residence.text.help.InformationPager;
-import com.bekvon.bukkit.legacy_residence.utils.*;
+import com.bekvon.bukkit.legacy_residence.utils.FileCleanUp;
+import com.bekvon.bukkit.legacy_residence.utils.RandomTp;
+import com.bekvon.bukkit.legacy_residence.utils.Sorting;
+import com.bekvon.bukkit.legacy_residence.utils.TabComplete;
 import com.bekvon.bukkit.legacy_residence.vaultinterface.ResidenceVaultAdapter;
 import com.residence.mcstats.Metrics;
 import com.residence.zip.ZipLibrary;
@@ -471,48 +476,9 @@ public class Residence extends JavaPlugin {
 
             this.getConfigManager().copyOverTranslations();
 
-            try {
-                File langFile = new File(new File(dataFolder, "Language"), getConfigManager().getLanguage() + ".yml");
+            parseHelpEntries();
 
-                BufferedReader in = null;
-                try {
-                    in = new BufferedReader(new InputStreamReader(new FileInputStream(langFile), StandardCharsets.UTF_8));
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
 
-                if (langFile.isFile()) {
-                    FileConfiguration langconfig = new YamlConfiguration();
-                    langconfig.load(in);
-                    helppages = HelpEntry.parseHelp(langconfig, "CommandHelp");
-                } else {
-                    Bukkit.getConsoleSender().sendMessage(getPrefix() + " Language file does not exist...");
-                }
-                if (in != null)
-                    in.close();
-            } catch (Exception ex) {
-                Bukkit.getConsoleSender().sendMessage(getPrefix() + " Failed to load language file: " + getConfigManager().getLanguage()
-                        + ".yml setting to default - English");
-
-                File langFile = new File(new File(dataFolder, "Language"), "English.yml");
-
-                BufferedReader in = null;
-                try {
-                    in = new BufferedReader(new InputStreamReader(new FileInputStream(langFile), StandardCharsets.UTF_8));
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-
-                if (langFile.isFile()) {
-                    FileConfiguration langconfig = new YamlConfiguration();
-                    langconfig.load(in);
-                    helppages = HelpEntry.parseHelp(langconfig, "CommandHelp");
-                } else {
-                    Bukkit.getConsoleSender().sendMessage(getPrefix() + " Language file does not exist...");
-                }
-                if (in != null)
-                    in.close();
-            }
 
             economy = null;
             if (this.getConfig().getBoolean("Global.EnableEconomy", false)) {
@@ -721,6 +687,60 @@ public class Residence extends JavaPlugin {
         getShopSignUtilManager().LoadSigns();
         getShopSignUtilManager().BoardUpdate();
         getVersionChecker().VersionCheck(null);
+    }
+
+    private void parseHelpEntries() {
+        try {
+            File langFile = new File(new File(dataFolder, "Language"), getConfigManager().getLanguage() + ".yml");
+
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(langFile), "UTF8"));
+            } catch (UnsupportedEncodingException | FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+            if (in != null && langFile.isFile()) {
+                FileConfiguration langconfig = new YamlConfiguration();
+                langconfig.load(in);
+                helppages = HelpEntry.parseHelp(langconfig, "CommandHelp");
+            } else {
+                Bukkit.getConsoleSender().sendMessage(getPrefix() + " Language file does not exist...");
+            }
+            if (in != null)
+                in.close();
+        } catch (Exception ex) {
+            Bukkit.getConsoleSender().sendMessage(getPrefix() + " Failed to load language file: " + getConfigManager().getLanguage()
+                    + ".yml setting to default - English");
+
+            File langFile = new File(new File(dataFolder, "Language"), "English.yml");
+
+            BufferedReader in = null;
+            try {
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(langFile), "UTF8"));
+            } catch (UnsupportedEncodingException | FileNotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+            try {
+                if (in != null && langFile.isFile()) {
+                    FileConfiguration langconfig = new YamlConfiguration();
+                    langconfig.load(in);
+                    helppages = HelpEntry.parseHelp(langconfig, "CommandHelp");
+                } else {
+                    Bukkit.getConsoleSender().sendMessage(getPrefix() + " Language file does not exist...");
+                }
+            } catch (Throwable e) {
+
+            } finally {
+                if (in != null)
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+        }
     }
 
     private boolean setupPlaceHolderAPI() {

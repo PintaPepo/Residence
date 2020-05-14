@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class select implements cmd {
 
     @Override
-    @CommandAnnotation(simple = true, priority = 1300)
+    @CommandAnnotation(priority = 1300)
     public Boolean perform(Residence plugin, CommandSender sender, String[] args, boolean resadmin) {
         if (!(sender instanceof Player))
             return false;
@@ -47,104 +47,91 @@ public class select implements cmd {
         }
 
         if (args.length == 1) {
-            if (args[0].equals("size") || args[0].equals("cost")) {
-                if (plugin.getSelectionManager().hasPlacedBoth(player)) {
-                    try {
-                        plugin.getSelectionManager().showSelectionInfo(player);
-                        return true;
-                    } catch (Exception ex) {
-                        Logger.getLogger(Residence.class.getName()).log(Level.SEVERE, null, ex);
-                        return true;
+            switch (args[0].toLowerCase()) {
+                case "size":
+                case "cost":
+                    if (plugin.getSelectionManager().hasPlacedBoth(player) || plugin.getSelectionManager().worldEdit(player)) {
+                        try {
+                            plugin.getSelectionManager().showSelectionInfo(player);
+                            return true;
+                        } catch (Exception ex) {
+                            Logger.getLogger(Residence.class.getName()).log(Level.SEVERE, null, ex);
+                            return true;
+                        }
                     }
-                } else if (plugin.getSelectionManager().worldEdit(player)) {
-                    try {
-                        plugin.getSelectionManager().showSelectionInfo(player);
-                        return true;
-                    } catch (Exception ex) {
-                        Logger.getLogger(Residence.class.getName()).log(Level.SEVERE, null, ex);
-                        return true;
-                    }
-                }
-            } else if (args[0].equals("vert")) {
-                plugin.getSelectionManager().vert(player, resadmin);
-                plugin.getSelectionManager().afterSelectionUpdate(player, true);
-                return true;
-            } else if (args[0].equals("sky")) {
-                plugin.getSelectionManager().sky(player, resadmin);
-                plugin.getSelectionManager().afterSelectionUpdate(player, true);
-                return true;
-            } else if (args[0].equals("bedrock")) {
-                plugin.getSelectionManager().bedrock(player, resadmin);
-                plugin.getSelectionManager().afterSelectionUpdate(player, true);
-                return true;
-            } else if (args[0].equals("coords")) {
-                plugin.msg(player, lm.General_Separator);
-
-                if (!plugin.getSelectionManager().hasPlacedBoth(player)) {
-                    plugin.msg(player, lm.Select_Points);
+                    return false;
+                case "vert":
+                    plugin.getSelectionManager().vert(player, resadmin);
+                    plugin.getSelectionManager().afterSelectionUpdate(player, true);
                     return true;
-                }
+                case "sky":
+                    plugin.getSelectionManager().sky(player, resadmin);
+                    plugin.getSelectionManager().afterSelectionUpdate(player, true);
+                    return true;
+                case "bedrock":
+                    plugin.getSelectionManager().bedrock(player, resadmin);
+                    plugin.getSelectionManager().afterSelectionUpdate(player, true);
+                    return true;
+                case "coords":
+                    plugin.msg(player, lm.General_Separator);
 
-                Location playerLoc1 = plugin.getSelectionManager().getPlayerLoc1(player);
-                if (playerLoc1 != null) {
-                    plugin.msg(player, lm.Select_Primary, plugin.msg(lm.General_CoordsTop, playerLoc1.getBlockX(), playerLoc1
-                            .getBlockY(), playerLoc1.getBlockZ()));
-                }
-                Location playerLoc2 = plugin.getSelectionManager().getPlayerLoc2(player);
-                if (playerLoc2 != null) {
-                    plugin.msg(player, lm.Select_Secondary, plugin.msg(lm.General_CoordsBottom, playerLoc2.getBlockX(),
-                            playerLoc2.getBlockY(), playerLoc2.getBlockZ()));
-                }
-                plugin.msg(player, lm.General_Separator);
-                plugin.getSelectionManager().afterSelectionUpdate(player, false);
-                return true;
-            } else if (args[1].equals("chunk")) {
-                plugin.getSelectionManager().getSelection(player).selectChunk();
-                plugin.getSelectionManager().afterSelectionUpdate(player, true);
-                return true;
-            } else if (args[1].equals("worldedit")) {
-                if (plugin.getSelectionManager().worldEdit(player)) {
-                    plugin.msg(player, lm.Select_Success);
+                    if (!plugin.getSelectionManager().hasPlacedBoth(player)) {
+                        plugin.msg(player, lm.Select_Points);
+                        return true;
+                    }
+
+                    Location playerLoc1 = plugin.getSelectionManager().getPlayerLoc1(player);
+                    if (playerLoc1 != null) {
+                        plugin.msg(player, lm.Select_Primary, plugin.msg(lm.General_CoordsTop, playerLoc1.getBlockX(), playerLoc1
+                                .getBlockY(), playerLoc1.getBlockZ()));
+                    }
+                    Location playerLoc2 = plugin.getSelectionManager().getPlayerLoc2(player);
+                    if (playerLoc2 != null) {
+                        plugin.msg(player, lm.Select_Secondary, plugin.msg(lm.General_CoordsBottom, playerLoc2.getBlockX(),
+                                playerLoc2.getBlockY(), playerLoc2.getBlockZ()));
+                    }
+                    plugin.msg(player, lm.General_Separator);
                     plugin.getSelectionManager().afterSelectionUpdate(player, false);
-                }
-                return true;
+                    return true;
+                case "chunk":
+                    plugin.getSelectionManager().getSelection(player).selectChunk();
+                    plugin.getSelectionManager().afterSelectionUpdate(player, true);
+                    return true;
+                case "worldedit":
+                    if (plugin.getSelectionManager().worldEdit(player)) {
+                        plugin.msg(player, lm.Select_Success);
+                        plugin.getSelectionManager().afterSelectionUpdate(player, false);
+                    }
+                    return true;
             }
         } else if (args.length == 2) {
-            if (args[0].equals("expand")) {
-                int amount;
-                try {
-                    amount = Integer.parseInt(args[1]);
-                } catch (Exception ex) {
-                    plugin.msg(player, lm.Invalid_Amount);
-                    return true;
-                }
-                plugin.getSelectionManager().modify(player, false, amount);
-                return true;
+            int amount = 0;
+            switch (args[0].toLowerCase()) {
+                case "expand":
+                case "contract":
+                case "shift":
+                    try {
+                        amount = Integer.parseInt(args[1]);
+                    } catch (Exception ex) {
+                        plugin.msg(player, lm.Invalid_Amount);
+                        return true;
+                    }
             }
-            if (args[0].equals("contract")) {
-                int amount;
-                try {
-                    amount = Integer.parseInt(args[1]);
-                } catch (Exception ex) {
-                    plugin.msg(player, lm.Invalid_Amount);
+
+            switch (args[0].toLowerCase()) {
+                case "expand":
+                    plugin.getSelectionManager().modify(player, false, amount);
                     return true;
-                }
-                plugin.getSelectionManager().contract(player, amount);
-                return true;
-            } else if (args[0].equals("shift")) {
-                int amount;
-                try {
-                    amount = Integer.parseInt(args[1]);
-                } catch (Exception ex) {
-                    plugin.msg(player, lm.Invalid_Amount);
+                case "contract":
+                    plugin.getSelectionManager().contract(player, amount);
                     return true;
-                }
-                if (amount > 100)
-                    amount = 100;
-                if (amount < -100)
-                    amount = -100;
-                plugin.getSelectionManager().modify(player, true, amount);
-                return true;
+                case "shift":
+                    if (amount > 100)
+                        amount = 100;
+                    if (amount < -100)
+                        amount = -100;
+                    plugin.getSelectionManager().modify(player, true, amount);
+                    return true;
             }
         }
         if ((args.length == 1 || args.length == 2) && args[0].equals("auto")) {

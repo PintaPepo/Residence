@@ -137,8 +137,8 @@ public class Residence extends JavaPlugin {
     private com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = null;
     private CMIMaterial wepid;
     //    private String ServerLandname = "Server_Land";
-    private String ServerLandUUID = "00000000-0000-0000-0000-000000000000";
-    private String TempUserUUID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+    private final String ServerLandUUID = "00000000-0000-0000-0000-000000000000";
+    private final String TempUserUUID = "ffffffff-ffff-ffff-ffff-ffffffffffff";
     private NMS nms;
     private Placeholder Placeholder;
     private boolean PlaceholderAPIEnabled = false;

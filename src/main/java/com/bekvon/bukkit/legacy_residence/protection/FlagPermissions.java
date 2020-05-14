@@ -602,9 +602,9 @@ public class FlagPermissions {
     public boolean inheritanceIsPlayerSet(String player, String flag) {
         Map<String, Boolean> flags = this.getPlayerFlags(player, false);
         if (flags == null) {
-            return parent == null ? false : parent.inheritanceIsPlayerSet(player, flag);
+            return parent != null && parent.inheritanceIsPlayerSet(player, flag);
         }
-        return flags.containsKey(flag) ? true : parent == null ? false : parent.inheritanceIsPlayerSet(player, flag);
+        return flags.containsKey(flag) || (parent != null && parent.inheritanceIsPlayerSet(player, flag));
     }
 
     public boolean isGroupSet(String group, String flag) {
@@ -620,9 +620,9 @@ public class FlagPermissions {
         group = group.toLowerCase();
         Map<String, Boolean> flags = groupFlags.get(group);
         if (flags == null) {
-            return parent == null ? false : parent.inheritanceIsGroupSet(group, flag);
+            return parent != null && parent.inheritanceIsGroupSet(group, flag);
         }
-        return flags.containsKey(flag) ? true : parent == null ? false : parent.inheritanceIsGroupSet(group, flag);
+        return flags.containsKey(flag) || parent != null && parent.inheritanceIsGroupSet(group, flag);
     }
 
     public boolean isSet(String flag) {
@@ -630,7 +630,7 @@ public class FlagPermissions {
     }
 
     public boolean inheritanceIsSet(String flag) {
-        return cuboidFlags.containsKey(flag) ? true : parent == null ? false : parent.inheritanceIsSet(flag);
+        return cuboidFlags.containsKey(flag) || parent != null && parent.inheritanceIsSet(flag);
     }
 
     public boolean checkValidFlag(String flag, boolean globalflag) {
@@ -792,7 +792,7 @@ public class FlagPermissions {
                 newperms.cuboidFlags = (Map) root.get("AreaFlags");
             else {
                 if (newperms instanceof ResidencePermissions) {
-                    Map<String, Boolean> ft = new HashMap<>();
+                    Map<String, Boolean> ft;
                     ft = Residence.getInstance().getResidenceManager().getChacheFlags(((ResidencePermissions) newperms).getWorld(), (Integer) root.get("AreaFlags"));
                     if (ft != null && !ft.isEmpty())
                         newperms.cuboidFlags = new HashMap<>(ft);

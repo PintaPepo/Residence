@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class auto implements cmd {
 
@@ -225,6 +226,9 @@ public class auto implements cmd {
                 }
             }
         }
+
+        if (resName == null)
+            resName = sender.getName() + (new Random().nextInt(10000));
 
         player.performCommand((resadmin ? "resadmin" : "res") + " create " + resName);
         return true;

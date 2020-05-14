@@ -43,14 +43,12 @@ public class ResidencePlayer {
             return;
         this.uuid = off.getUniqueId();
         this.userName = off.getName();
-        Residence.getInstance().addOfflinePlayerToChache(off);
         this.updatePlayer();
     }
 
     public ResidencePlayer(Player player) {
         if (player == null)
             return;
-        Residence.getInstance().addOfflinePlayerToChache(player);
         this.updatePlayer(player);
     }
 

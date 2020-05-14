@@ -26,45 +26,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PermissionManager {
-    private static final int cacheClearDelay = 600;
     protected static PermissionsInterface perms;
     protected LinkedHashMap<String, PermissionGroup> groups;
     protected Map<String, String> playersGroup;
     protected FlagPermissions globalFlagPerms;
-    protected HashMap<String, PlayerGroup> groupsMap = new HashMap<String, PlayerGroup>();
     private PermissionGroup defaultGroup = null;
     private Residence plugin;
-    private int autoCacheClearId = 0;
-    private HashMap<UUID, HashMap<String, PermissionInfo>> cache = new HashMap<UUID, HashMap<String, PermissionInfo>>();
-    private Runnable cacheClear = new Runnable() {
-        @Override
-        public void run() {
-            cache.clear();
-        }
-    };
 
     public PermissionManager(Residence plugin) {
         this.plugin = plugin;
         try {
-            groups = new LinkedHashMap<String, PermissionGroup>();
-            playersGroup = Collections.synchronizedMap(new HashMap<String, String>());
+            groups = new LinkedHashMap<>();
+            playersGroup = Collections.synchronizedMap(new HashMap<>());
             globalFlagPerms = new FlagPermissions();
             this.readConfig();
             checkPermissions();
         } catch (Exception ex) {
             Logger.getLogger(PermissionManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void startCacheClearScheduler() {
-        autoCacheClearId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, cacheClear, cacheClearDelay * 20L, cacheClearDelay * 20L);
-    }
-
-    public void stopCacheClearScheduler() {
-        try {
-            if (autoCacheClearId > 0)
-                Bukkit.getScheduler().cancelTask(autoCacheClearId);
-        } catch (Throwable e) {
         }
     }
 
@@ -172,34 +150,6 @@ public class PermissionManager {
 
     public PermissionsInterface getPermissionsPlugin() {
         return perms;
-    }
-
-    public void removeFromCache(Player player) {
-        cache.remove(player.getUniqueId());
-    }
-
-    public PermissionInfo getFromCache(Player player, String perm) {
-        HashMap<String, PermissionInfo> old = cache.get(player.getUniqueId());
-        if (old == null) {
-            return null;
-        }
-        return old.get(perm);
-    }
-
-    public PermissionInfo addToCache(Player player, String perm, boolean has, Long delayInMiliseconds) {
-        HashMap<String, PermissionInfo> old = cache.get(player.getUniqueId());
-        if (old == null) {
-            old = new HashMap<String, PermissionInfo>();
-        }
-
-        PermissionInfo info = new PermissionInfo(perm, delayInMiliseconds);
-        info.setLastChecked(System.currentTimeMillis());
-        info.setEnabled(has);
-
-        old.put(perm, info);
-        cache.put(player.getUniqueId(), old);
-
-        return info;
     }
 
     public PermissionAttachmentInfo getSetPermission(CommandSender sender, String perm) {
@@ -432,22 +382,6 @@ public class PermissionManager {
             return hasPermission(sender, false, true, delay, null, extra);
         }
 
-//	public boolean hasPermission(Player player, String inName) {
-//
-//	    String name = inName.toLowerCase(java.util.Locale.ENGLISH);
-//
-//	    if (player.isPermissionSet(name)) {
-//		return player.getperpermissions.get(name).getValue();
-//	    } else {
-//		Permission perm = Bukkit.getServer().getPluginManager().getPermission(name);
-//
-//		if (perm != null) {
-//		    return perm.getDefault().getValue(isOp());
-//		} else {
-//		    return Permission.DEFAULT_PERMISSION.getValue(isOp());
-//		}
-//	    }
-//	}
 
         public boolean hasPermission(CommandSender sender, boolean inform, String... extra) {
             return hasPermission(sender, inform, true, extra);
@@ -473,15 +407,7 @@ public class PermissionManager {
 
             Player player = (Player) sender;
 
-            PermissionInfo info = Residence.getInstance().getPermissionManager().getFromCache(player, perm);
-            boolean has = false;
-            if (info != null && info.getDelay() + info.getLastChecked() > System.currentTimeMillis()) {
-                has = info.isEnabled();
-            } else {
-                has = sender.hasPermission(perm);
-                Residence.getInstance().getPermissionManager().addToCache(player, perm, has, delay == null ? 200L : delay);
-            }
-
+            boolean has = sender.hasPermission(perm);
             if (!has && inform) {
                 boolean showPerm = ResPerm.permisiononerror.hasPermission(sender, 50000L);
                 RawMessage rm = new RawMessage();

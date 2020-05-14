@@ -472,8 +472,6 @@ public class ResidencePlayerListener implements Listener {
 
         Player player = event.getPlayer();
 
-        plugin.getPermissionManager().removeFromCache(player);
-
         ClaimedResidence res = plugin.getResidenceManager().getByLoc(player.getLocation());
 
         if (res == null)
@@ -854,7 +852,6 @@ public class ResidencePlayerListener implements Listener {
 
         plugin.getChatManager().removeFromChannel(pname);
         plugin.getPlayerListener().removePlayerResidenceChat(event.getPlayer());
-        plugin.addOfflinePlayerToChache(event.getPlayer());
 
         plugin.getAutoSelectionManager().getList().remove(event.getPlayer().getUniqueId());
     }

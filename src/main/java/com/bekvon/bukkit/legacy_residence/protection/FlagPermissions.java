@@ -9,6 +9,7 @@ import com.bekvon.bukkit.legacy_residence.containers.ResidencePlayer;
 import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionGroup;
 import com.bekvon.bukkit.legacy_residence.permissions.PermissionManager.ResPerm;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -747,7 +748,7 @@ public class FlagPermissions {
 
             try {
                 UUID uuid = UUID.fromString(one.getKey());
-                OfflinePlayer player = Residence.getInstance().getOfflinePlayer(uuid);
+                OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
                 newperms.cachedPlayerNameUUIDs.put(uuid, player.getName());
             } catch (Exception e) {
                 continue;

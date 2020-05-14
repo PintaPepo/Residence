@@ -77,11 +77,11 @@ public class Residence extends JavaPlugin {
     public HelpEntry helppages;
     public File dataFolder;
     public Map<String, String> deleteConfirm;
-    public Map<String, String> UnrentConfirm = new HashMap<String, String>();
+    public Map<String, String> UnrentConfirm = new HashMap<>();
     public List<String> resadminToggle;
-    public HashMap<String, Long> rtMap = new HashMap<String, Long>();
-    public List<String> teleportDelayMap = new ArrayList<String>();
-    public HashMap<String, ClaimedResidence> teleportMap = new HashMap<String, ClaimedResidence>();
+    public HashMap<String, Long> rtMap = new HashMap<>();
+    public List<String> teleportDelayMap = new ArrayList<>();
+    public HashMap<String, ClaimedResidence> teleportMap = new HashMap<>();
     protected String ResidenceVersion;
     protected List<String> authlist;
     protected ResidenceManager rmanager;
@@ -132,8 +132,7 @@ public class Residence extends JavaPlugin {
     private WorldGuardInterface worldGuardUtil;
     private int wepVersion = 6;
     private int saveVersion = 1;
-    private ConcurrentHashMap<String, OfflinePlayer> OfflinePlayerList = new ConcurrentHashMap<String, OfflinePlayer>();
-    private Map<UUID, OfflinePlayer> cachedPlayerNameUUIDs = new HashMap<UUID, OfflinePlayer>();
+    private ConcurrentHashMap<String, OfflinePlayer> OfflinePlayerList = new ConcurrentHashMap<>();
     private com.sk89q.worldedit.bukkit.WorldEditPlugin wep = null;
     private com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = null;
     private CMIMaterial wepid;
@@ -333,8 +332,6 @@ public class Residence extends JavaPlugin {
 
         server.getScheduler().cancelTask(DespawnMobsBukkitId);
 
-        this.getPermissionManager().stopCacheClearScheduler();
-
         if (getConfigManager().useLeases()) {
             server.getScheduler().cancelTask(leaseBukkitId);
         }
@@ -380,8 +377,8 @@ public class Residence extends JavaPlugin {
 
             initsuccess = false;
             versionChecker = new VersionChecker(this);
-            deleteConfirm = new HashMap<String, String>();
-            resadminToggle = new ArrayList<String>();
+            deleteConfirm = new HashMap<>();
+            resadminToggle = new ArrayList<>();
             server = this.getServer();
             dataFolder = this.getDataFolder();
 
@@ -455,7 +452,6 @@ public class Residence extends JavaPlugin {
             nms = new CommonNMS();
 
             gmanager = new PermissionManager(this);
-            this.getPermissionManager().startCacheClearScheduler();
 
             imanager = new WorldItemManager(this);
             wmanager = new WorldFlagManager(this);
@@ -528,7 +524,6 @@ public class Residence extends JavaPlugin {
                     String name = player.getName();
                     if (name == null)
                         continue;
-                    this.addOfflinePlayerToChache(player);
                 }
                 Bukkit.getConsoleSender().sendMessage(getPrefix() + " Player data loaded: " + OfflinePlayerList.size());
             } else {
@@ -541,7 +536,6 @@ public class Residence extends JavaPlugin {
                             String name = player.getName();
                             if (name == null)
                                 continue;
-                            addOfflinePlayerToChache(player);
                         }
                     }
                 });
@@ -1161,7 +1155,7 @@ public class Residence extends JavaPlugin {
                     if (yml.getRoot().containsKey("Messages")) {
                         HashMap<Integer, MinimizeMessages> c = getResidenceManager().getCacheMessages().get(world.getName());
                         if (c == null)
-                            c = new HashMap<Integer, MinimizeMessages>();
+                            c = new HashMap<>();
                         Map<Integer, Object> ms = (Map<Integer, Object>) yml.getRoot().get("Messages");
                         if (ms != null) {
                             for (Entry<Integer, Object> one : ms.entrySet()) {
@@ -1179,7 +1173,7 @@ public class Residence extends JavaPlugin {
                     if (yml.getRoot().containsKey("Flags")) {
                         HashMap<Integer, MinimizeFlags> c = getResidenceManager().getCacheFlags().get(world.getName());
                         if (c == null)
-                            c = new HashMap<Integer, MinimizeFlags>();
+                            c = new HashMap<>();
                         Map<Integer, Object> ms = (Map<Integer, Object>) yml.getRoot().get("Flags");
                         if (ms != null) {
                             for (Entry<Integer, Object> one : ms.entrySet()) {
@@ -1344,7 +1338,7 @@ public class Residence extends JavaPlugin {
 
         File newGroups = new File(this.getDataFolder(), "config.yml");
 
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("ResidenceVersion");
         list.add("Global.Flags");
         list.add("Global.FlagPermission");
@@ -1363,7 +1357,7 @@ public class Residence extends JavaPlugin {
 
         File newConfig = new File(this.getDataFolder(), "groups.yml");
         list.clear();
-        list = new ArrayList<String>();
+        list = new ArrayList<>();
         list.add("ResidenceVersion");
         list.add("Global");
         list.add("ItemList");
@@ -1376,7 +1370,7 @@ public class Residence extends JavaPlugin {
 
         File newFlags = new File(this.getDataFolder(), "flags.yml");
         list.clear();
-        list = new ArrayList<String>();
+        list = new ArrayList<>();
         list.add("ResidenceVersion");
         list.add("GroupAssignments");
         list.add("Groups");
@@ -1506,30 +1500,6 @@ public class Residence extends JavaPlugin {
         if (playerUUID != null)
             return playerUUID.toString();
         return null;
-    }
-
-    public OfflinePlayer getOfflinePlayer(UUID uuid) {
-        OfflinePlayer offPlayer = cachedPlayerNameUUIDs.get(uuid);
-        if (offPlayer != null)
-            return offPlayer;
-
-        Player player = Bukkit.getPlayer(uuid);
-        if (player != null)
-            return player;
-
-//	offPlayer = Bukkit.getOfflinePlayer(uuid);
-//	if (offPlayer != null)
-//	    addOfflinePlayerToChache(offPlayer);
-        return offPlayer;
-    }
-
-    public void addOfflinePlayerToChache(OfflinePlayer player) {
-        if (player == null)
-            return;
-        if (player.getName() != null)
-            OfflinePlayerList.put(player.getName().toLowerCase(), player);
-        if (player.getUniqueId() != null)
-            cachedPlayerNameUUIDs.put(player.getUniqueId(), player);
     }
 
     public String getPlayerName(String uuid) {

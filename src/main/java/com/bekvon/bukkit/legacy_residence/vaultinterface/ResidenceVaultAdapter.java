@@ -22,28 +22,25 @@ public class ResidenceVaultAdapter implements EconomyInterface, PermissionsInter
         setupChat(s);
     }
 
-    private static boolean setupPermissions(Server s) {
-        RegisteredServiceProvider<Permission> permissionProvider = s.getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+    private static void setupPermissions(Server s) {
+        RegisteredServiceProvider<Permission> permissionProvider = s.getServicesManager().getRegistration(Permission.class);
         if (permissionProvider != null) {
             permissions = permissionProvider.getProvider();
         }
-        return (permissions != null);
     }
 
-    private static boolean setupChat(Server s) {
-        RegisteredServiceProvider<Chat> chatProvider = s.getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+    private static void setupChat(Server s) {
+        RegisteredServiceProvider<Chat> chatProvider = s.getServicesManager().getRegistration(Chat.class);
         if (chatProvider != null) {
             chat = chatProvider.getProvider();
         }
-        return (chat != null);
     }
 
-    private static boolean setupEconomy(Server s) {
-        RegisteredServiceProvider<Economy> economyProvider = s.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+    private static void setupEconomy(Server s) {
+        RegisteredServiceProvider<Economy> economyProvider = s.getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
         }
-        return (economy != null);
     }
 
     public static boolean hasPermission(OfflinePlayer player, String perm, String world) {
@@ -57,10 +54,7 @@ public class ResidenceVaultAdapter implements EconomyInterface, PermissionsInter
     }
 
     public boolean permissionsOK() {
-        if (permissions != null && !permissions.getName().equalsIgnoreCase("SuperPerms")) {
-            return true;
-        }
-        return false;
+        return permissions != null;
     }
 
     public boolean economyOK() {

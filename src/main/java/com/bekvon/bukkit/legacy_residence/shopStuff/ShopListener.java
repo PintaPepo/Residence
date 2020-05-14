@@ -158,7 +158,7 @@ public class ShopListener implements Listener {
 
         event.setCancelled(true);
 
-        plugin.msg(event.getPlayer(), ChatColor.YELLOW + "Can't change while shop flag is set to true");
+        plugin.msg(event.getPlayer(), lm.Shop_ChantChange);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -10,7 +10,9 @@ import com.bekvon.bukkit.legacy_residence.containers.lm;
 import com.bekvon.bukkit.legacy_residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.legacy_residence.protection.FlagPermissions;
 import com.bekvon.bukkit.legacy_residence.protection.FlagPermissions.FlagCombo;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -23,15 +25,19 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.hanging.HangingBreakEvent.RemoveCause;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class ResidenceEntityListener implements Listener {
 
+    private final static String CrossbowShooter = "CrossbowShooter";
     Residence plugin;
 
     public ResidenceEntityListener(Residence plugin) {
@@ -47,7 +53,7 @@ public class ResidenceEntityListener implements Listener {
     }
 
     private static boolean damageableProjectile(Entity ent) {
-        if(ent instanceof AbstractArrow){
+        if (ent instanceof AbstractArrow) {
             return true;
         }
         // TODO improve performance use Set, or directly remove all the checks
@@ -60,6 +66,26 @@ public class ResidenceEntityListener implements Listener {
             }
         }
         return false;
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onEntityShootBowEvent(EntityShootBowEvent event) {
+
+        if (Version.isCurrentEqualOrLower(Version.v1_14_R1)) {
+            return;
+        }
+
+        if (event.getBow() != null && event.getBow().getType() != Material.CROSSBOW) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        if (event.getProjectile().getType() == EntityType.FIREWORK) {
+            event.getProjectile().setMetadata(CrossbowShooter, new FixedMetadataValue(plugin, event.getEntity().getUniqueId()));
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -1320,7 +1346,7 @@ public class ResidenceEntityListener implements Listener {
             }
             ent = attackevent.getEntity();
             if ((ent instanceof Player || tamedAnimal) && (damager instanceof Player || (damager instanceof Projectile && (((Projectile) damager)
-                    .getShooter() instanceof Player))) && event.getCause() != DamageCause.FALL) {
+                    .getShooter() instanceof Player))) && event.getCause() != DamageCause.FALL || damager instanceof Firework) {
                 Player attacker = null;
                 if (damager instanceof Player) {
                     attacker = (Player) damager;
@@ -1334,21 +1360,32 @@ public class ResidenceEntityListener implements Listener {
                         isOnFire = true;
 
                     attacker = (Player) ((Projectile) damager).getShooter();
+                } else {
+                    // Damager is instance of Firework, fix the caotic ifs
+                    List<MetadataValue> meta = damager.getMetadata(CrossbowShooter);
+                    if (!meta.isEmpty()) {
+                        try {
+                            String uid = meta.get(0).asString();
+                            attacker = Bukkit.getPlayer(UUID.fromString(uid));
+                        } catch (Exception e) {
+                            plugin.getLogger().fine("Exception muted in ResidenceEntityListener.class: " + e);
+                        }
+                    }
                 }
 
                 if (!(ent instanceof Player))
                     return;
 
-                if (srcarea != null && area != null && srcarea.equals(area) && attacker != null && area.isUnderRaid() && area.getRaid().onSameTeam(attacker, (Player) ent)
+                if (srcarea != null && srcarea.equals(area) && attacker != null && area.isUnderRaid() && area.getRaid().onSameTeam(attacker, (Player) ent)
                         && !ConfigManager.RaidFriendlyFire) {
                     event.setCancelled(true);
                 }
 
-                if (srcarea != null && area != null && srcarea.equals(area) && attacker != null && area.isUnderRaid() && !area.getRaid().onSameTeam(attacker, (Player) ent)) {
+                if (srcarea != null && srcarea.equals(area) && attacker != null && area.isUnderRaid() && !area.getRaid().onSameTeam(attacker, (Player) ent)) {
                     return;
                 }
 
-                if (srcarea != null && area != null && srcarea.equals(area) && attacker != null &&
+                if (srcarea != null && srcarea.equals(area) && attacker != null &&
                         srcarea.getPermissions().playerHas((Player) ent, Flags.friendlyfire, FlagCombo.OnlyFalse) &&
                         srcarea.getPermissions().playerHas(attacker, Flags.friendlyfire, FlagCombo.OnlyFalse)) {
 
@@ -1370,15 +1407,14 @@ public class ResidenceEntityListener implements Listener {
                 /* Check for Player vs Player */
                 if (area == null) {
                     /* World PvP */
-                    if (damager != null)
-                        if (!plugin.getWorldFlags().getPerms(damager.getWorld().getName()).has(Flags.pvp, FlagCombo.TrueOrNone)) {
-                            if (attacker != null)
-                                plugin.msg(attacker, lm.General_WorldPVPDisabled);
-                            if (isOnFire)
-                                ent.setFireTicks(0);
-                            event.setCancelled(true);
-                            return;
-                        }
+                    if (!plugin.getWorldFlags().getPerms(damager.getWorld().getName()).has(Flags.pvp, FlagCombo.TrueOrNone)) {
+                        if (attacker != null)
+                            plugin.msg(attacker, lm.General_WorldPVPDisabled);
+                        if (isOnFire)
+                            ent.setFireTicks(0);
+                        event.setCancelled(true);
+                        return;
+                    }
 
                     /* Attacking from safe zone */
                     if (attacker != null) {

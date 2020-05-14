@@ -175,7 +175,6 @@ public class setFlagInfo {
             buttons.add(button);
             i++;
         }
-        description.clear();
     }
 
     private void recalculatePlayer() {
@@ -277,7 +276,6 @@ public class setFlagInfo {
             button.hideItemFlags();
             buttons.add(button);
         }
-        description.clear();
     }
 
     private ItemStack updateLook(String flagName) {

@@ -133,6 +133,8 @@ public class Residence extends JavaPlugin {
     private int wepVersion = 6;
     private int saveVersion = 1;
     private ConcurrentHashMap<String, OfflinePlayer> OfflinePlayerList = new ConcurrentHashMap<>();
+    private Map<UUID, OfflinePlayer> cachedPlayerNameUUIDs = new HashMap<UUID, OfflinePlayer>();
+
     private com.sk89q.worldedit.bukkit.WorldEditPlugin wep = null;
     private com.sk89q.worldguard.bukkit.WorldGuardPlugin wg = null;
     private CMIMaterial wepid;
@@ -240,8 +242,25 @@ public class Residence extends JavaPlugin {
         return instance;
     }
 
-    public boolean isSpigot() {
-        return spigotPlatform;
+    public OfflinePlayer getOfflinePlayer(UUID uuid) {
+        OfflinePlayer offPlayer = cachedPlayerNameUUIDs.get(uuid);
+        if (offPlayer != null)
+            return offPlayer;
+
+        Player player = Bukkit.getPlayer(uuid);
+        if (player != null)
+            return player;
+
+        return offPlayer;
+    }
+
+    public void addOfflinePlayerToChache(OfflinePlayer player) {
+        if (player == null)
+            return;
+        if (player.getName() != null)
+            OfflinePlayerList.put(player.getName().toLowerCase(), player);
+        if (player.getUniqueId() != null)
+            cachedPlayerNameUUIDs.put(player.getUniqueId(), player);
     }
 
     public HashMap<String, ClaimedResidence> getTeleportMap() {
@@ -350,19 +369,6 @@ public class Residence extends JavaPlugin {
             } catch (Exception ex) {
                 Logger.getLogger("Minecraft").log(Level.SEVERE, "[Residence] SEVERE SAVE ERROR", ex);
             }
-
-//	    File file = new File(this.getDataFolder(), "uuids.yml");
-//	    YamlConfiguration conf = YamlConfiguration.loadConfiguration(file);
-//	    if (!conf.isConfigurationSection("UUIDS"))
-//		conf.createSection("UUIDS");
-//	    for (Entry<UUID, String> one : getCachedPlayerNameUUIDs().entrySet()) {
-//		conf.set("UUIDS." + one.getKey().toString(), one.getValue());
-//	    }
-//	    try {
-//		conf.save(file);
-//	    } catch (IOException e) {
-//		e.printStackTrace();
-//	    }
 
             Bukkit.getConsoleSender().sendMessage(getPrefix() + " Disabled!");
         }
@@ -513,32 +519,6 @@ public class Residence extends JavaPlugin {
                     Bukkit.getConsoleSender().sendMessage(getPrefix() + " Unable to find an economy system...");
                     economy = new BlackHoleEconomy();
                 }
-            }
-
-            // Only fill if we need to convert player data
-            if (getConfigManager().isUUIDConvertion()) {
-                Bukkit.getConsoleSender().sendMessage(getPrefix() + " Loading (" + Bukkit.getOfflinePlayers().length + ") player data");
-                for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-                    if (player == null)
-                        continue;
-                    String name = player.getName();
-                    if (name == null)
-                        continue;
-                }
-                Bukkit.getConsoleSender().sendMessage(getPrefix() + " Player data loaded: " + OfflinePlayerList.size());
-            } else {
-                Bukkit.getScheduler().runTaskAsynchronously(this, new Runnable() {
-                    @Override
-                    public void run() {
-                        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-                            if (player == null)
-                                continue;
-                            String name = player.getName();
-                            if (name == null)
-                                continue;
-                        }
-                    }
-                });
             }
 
             rmanager = new ResidenceManager(this);
@@ -1205,10 +1185,6 @@ public class Residence extends JavaPlugin {
                 addShops(one.getValue());
             }
 
-            if (getConfigManager().isUUIDConvertion()) {
-                getConfigManager().ChangeConfig("Global.UUIDConvertion", false);
-            }
-
             loadFile = new File(saveFolder, "forsale.yml");
             if (loadFile.isFile()) {
                 yml = new YMLSaveHelper(loadFile);
@@ -1276,38 +1252,6 @@ public class Residence extends JavaPlugin {
             System.out.println("[Residence] Wrote default flags...");
         }
     }
-
-//    private void writeDefaultLanguageFile(String lang) {
-//	File outFile = new File(new File(this.getDataFolder(), "Language"), lang + ".yml");
-//	outFile.getParentFile().mkdirs();
-//	if (this.writeDefaultFileFromJar(outFile, "languagefiles/" + lang + ".yml", true)) {
-//	    System.out.println("[Residence] Wrote default " + lang + " Language file...");
-//	}
-//    }
-//
-//    private boolean checkNewLanguageVersion(String lang) throws IOException, FileNotFoundException, InvalidConfigurationException {
-//	File outFile = new File(new File(this.getDataFolder(), "Language"), lang + ".yml");
-//	File checkFile = new File(new File(this.getDataFolder(), "Language"), "temp-" + lang + ".yml");
-//	if (outFile.isFile()) {
-//	    FileConfiguration testconfig = new YamlConfiguration();
-//	    testconfig.load(outFile);
-//	    int oldversion = testconfig.getInt("FieldsVersion", 0);
-//	    if (!this.writeDefaultFileFromJar(checkFile, "languagefiles/" + lang + ".yml", false)) {
-//		return false;
-//	    }
-//	    FileConfiguration testconfig2 = new YamlConfiguration();
-//	    testconfig2.load(checkFile);
-//	    int newversion = testconfig2.getInt("FieldsVersion", oldversion);
-//	    if (checkFile.isFile()) {
-//		checkFile.delete();
-//	    }
-//	    if (newversion > oldversion) {
-//		return true;
-//	    }
-//	    return false;
-//	}
-//	return true;
-//    }
 
     private void ConvertFile() {
         File file = new File(this.getDataFolder(), "config.yml");
@@ -1659,45 +1603,6 @@ public class Residence extends JavaPlugin {
         }
         return worldGuardUtil;
     }
-
-//    public boolean hasPermission(CommandSender sender, String permision, boolean output) {
-//	return hasPermission(sender, permision, output, null);
-//    }
-//
-//    public boolean hasPermission(CommandSender sender, String permision) {
-//	return hasPermission(sender, permision, true, null);
-//    }
-//
-//    public boolean hasPermission(CommandSender sender, String permision, String message) {
-//	return hasPermission(sender, permision, true, message);
-//    }
-//
-//    public boolean hasPermission(CommandSender sender, String permision, lm message) {
-//	return hasPermission(sender, permision, true, getLM().getMessage(message));
-//    }
-//
-//    public boolean hasPermission(CommandSender sender, String permision, Boolean output, String message) {
-//	if (sender == null)
-//	    return false;
-//	if (sender instanceof ConsoleCommandSender) {
-//	    return true;
-//	} else if (sender instanceof Player) {
-//	    if (sender.hasPermission(permision))
-//		return true;
-//	    if (output) {
-//		String outMsg = getLM().getMessage(lm.General_NoPermission);
-//		if (message != null)
-//		    outMsg = message;
-//
-//		RawMessage rm = new RawMessage();
-//		rm.add(outMsg, "§2" + permision);
-//		rm.show(sender);
-//		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-//		console.sendMessage(ChatColor.RED + sender.getName() + " No permission -> " + permision);
-//	    }
-//	}
-//	return false;
-//    }
 
     public String getPrefix() {
         return prefix;

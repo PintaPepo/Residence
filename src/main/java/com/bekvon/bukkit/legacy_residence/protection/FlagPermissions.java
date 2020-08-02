@@ -140,10 +140,6 @@ public class FlagPermissions {
         }
     }
 
-    public static boolean flagGroupExists(String group) {
-        return validFlagGroups.containsKey(group);
-    }
-
     public static void initValidFlags() {
         validAreaFlags.clear();
         validPlayerFlags.clear();

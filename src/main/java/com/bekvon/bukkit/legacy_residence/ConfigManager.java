@@ -183,7 +183,6 @@ public class ConfigManager {
     protected boolean enableLeaseMoneyAccount;
     protected boolean enableDebug = false;
     protected boolean versionCheck = true;
-    protected boolean UUIDConvertion = true;
     protected boolean OfflineMode = false;
     protected boolean SelectionIgnoreY = false;
     protected boolean SelectionIgnoreYInSubzone = false;
@@ -492,9 +491,6 @@ public class ConfigManager {
         c.copyDefaults(true);
 
         c.addComment("Global", "These are Global Settings for Residence.");
-
-        c.addComment("Global.UUIDConvertion", "Starts UUID conversion on plugin startup", "DONT change this if you are not sure what you doing");
-        UUIDConvertion = c.get("Global.UUIDConvertion", true);
 
         c.addComment("Global.OfflineMode",
                 "If you running offline server, better to check this as true. This will help to solve issues with changing players UUID.");
@@ -1772,10 +1768,6 @@ public class ConfigManager {
 
     public boolean versionCheck() {
         return versionCheck;
-    }
-
-    public boolean isUUIDConvertion() {
-        return UUIDConvertion;
     }
 
     public boolean isOfflineMode() {

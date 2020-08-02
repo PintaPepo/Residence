@@ -190,32 +190,6 @@ public class _CuboidArea {
         return highPoints.getWorld();
     }
 
-    public void save(DataOutputStream out) throws IOException {
-        out.writeUTF(highPoints.getWorld().getName());
-        out.writeInt(highPoints.getBlockX());
-        out.writeInt(highPoints.getBlockY());
-        out.writeInt(highPoints.getBlockZ());
-        out.writeInt(lowPoints.getBlockX());
-        out.writeInt(lowPoints.getBlockY());
-        out.writeInt(lowPoints.getBlockZ());
-    }
-
-    public _CuboidArea load(DataInputStream in) throws IOException {
-        _CuboidArea newArea = new _CuboidArea();
-        Server server = Residence.getInstance().getServ();
-        World world = server.getWorld(in.readUTF());
-        int highx = in.readInt();
-        int highy = in.readInt();
-        int highz = in.readInt();
-        int lowx = in.readInt();
-        int lowy = in.readInt();
-        int lowz = in.readInt();
-        newArea.highPoints = new Location(world, highx, highy, highz);
-        newArea.lowPoints = new Location(world, lowx, lowy, lowz);
-        newArea.worldName = world.getName();
-        return newArea;
-    }
-
     public Map<String, Object> save() {
         Map<String, Object> root = new LinkedHashMap<>();
         root.put("X1", this.highPoints.getBlockX());
